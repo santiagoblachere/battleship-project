@@ -2,8 +2,9 @@
 // Each player object should contain its own gameboard.
 
 export default class Player {
-	constructor() {
-		this.gamboard = [
+	constructor(name) {
+		this.name = name;
+		this.gameboard = [
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

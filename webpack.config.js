@@ -10,6 +10,9 @@ module.exports = {
 		ship: "./src/ship.js",
 	},
 	devtool: "inline-source-map",
+	devServer: {
+		static: "./dist",
+	},
 	plugins: [
 		new HtmlWebpackPlugin({
 			title: "BATTLESHIP",

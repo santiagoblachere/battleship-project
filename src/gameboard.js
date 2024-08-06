@@ -1,9 +1,11 @@
 import Ship from "./ship";
 import Player from "./player";
 export default class Gameboard {
-	constructor() {
-		this.playerA = new Player().gamboard;
-		this.playerB = new Player().gamboard;
+	constructor(user, computer) {
+		this.user = user;
+		this.computer = computer;
+		this.playerA = user.gameboard;
+		this.playerB = computer.gameboard;
 		this.attacksMissedPlayerA = 0;
 		this.attacksMissedPlayerB = 0;
 		this.playerALost = false;
