@@ -1,5 +1,4 @@
 import Ship from "./ship";
-import Player from "./player";
 export default class Gameboard {
 	constructor(user, computer) {
 		this.user = user;
@@ -62,18 +61,19 @@ export default class Gameboard {
 		}
 	}
 	receiveAttack(coords, player) {
+		console.log(coords);
 		let y = coords[0];
 		let x = coords[1];
 		let grid;
-		if (player === "playerA") {
+		if (player.name === "user") {
 			grid = this.playerA;
-		} else if (player === "playerB") {
+		} else if (player.name === "computer") {
 			grid = this.playerB;
 		}
 		let cell = grid[y][x];
 		if (cell === 0) {
 			grid[y][x] = -1;
-			player === "playerA"
+			player.name === "user"
 				? this.attacksMissedPlayerA++
 				: this.attacksMissedPlayerB++;
 			return false;

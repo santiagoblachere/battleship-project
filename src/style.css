@@ -1,6 +1,11 @@
-.root {
+body {
     display: flex;
     justify-content: center;
+    background-color: black;
+}
+.boardContainer {
+    display: flex;
+    gap: 20px;
 }
 .cell {
     border: 1px solid black;
