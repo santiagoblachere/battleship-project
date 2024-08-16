@@ -1,4 +1,5 @@
 import Ship from "./ship";
+
 export default class Gameboard {
 	constructor(user, computer) {
 		this.user = user;
@@ -10,95 +11,78 @@ export default class Gameboard {
 		this.playerALost = false;
 		this.playerBLost = false;
 	}
-	place(ship, player, start, direction) {
-		// start = [3,4]
-		let grid;
-		if (player === "playerA") {
-			grid = this.playerA;
-		} else if (player === "playerB") {
-			grid = this.playerB;
-		}
-		let slotsAvailable = true;
 
+	place(ship, player, start, direction) {
+		let grid = player === "user" ? this.playerA : this.playerB;
+		console.log("Player A Board:", this.playerA);
+		console.log("Player B Board:", this.playerB);
 		let y = start[0];
 		let x = start[1];
 		for (let index = 0; index < ship.length; index++) {
-			if (grid[y][x] === undefined || grid[y][x] !== 0) slotsAvailable = false;
-			if (direction == "left") {
-				x = x - 1;
+			if (
+				y < 0 ||
+				y >= grid.length ||
+				x < 0 ||
+				x >= grid[0].length ||
+				grid[y][x] !== 0
+			) {
+				return "CANT PLACE THERE";
 			}
-			if (direction == "right") {
-				x = x + 1;
-			}
-			if (direction == "up") {
-				y = y - 1;
-			}
-			if (direction == "down") {
-				y = y + 1;
-			}
+
+			if (direction === "left") x--;
+			if (direction === "right") x++;
+			if (direction === "up") y--;
+			if (direction === "down") y++;
+		}
+		y = start[0];
+		x = start[1];
+		for (let index = 0; index < ship.length; index++) {
+			grid[y][x] = ship;
+			if (direction === "left") x--;
+			if (direction === "right") x++;
+			if (direction === "up") y--;
+			if (direction === "down") y++;
 		}
 
-		if (slotsAvailable == true) {
-			let y = start[0];
-			let x = start[1];
-			for (let index = 0; index < ship.length; index++) {
-				grid[y][x] = ship;
-				if (direction == "left") {
-					x = x - 1;
-				}
-				if (direction == "right") {
-					x = x + 1;
-				}
-				if (direction == "up") {
-					y = y - 1;
-				}
-				if (direction == "down") {
-					y = y + 1;
-				}
-			}
-		} else {
-			return "CANT PLACE THERE";
-		}
+		return "PLACED";
 	}
 	receiveAttack(coords, player) {
-		console.log(coords);
 		let y = coords[0];
 		let x = coords[1];
-		let grid;
-		if (player.name === "user") {
-			grid = this.playerA;
-		} else if (player.name === "computer") {
-			grid = this.playerB;
-		}
+		let grid = player === "user" ? this.playerA : this.playerB;
 		let cell = grid[y][x];
+
 		if (cell === 0) {
 			grid[y][x] = -1;
-			player.name === "user"
+			player === "user"
 				? this.attacksMissedPlayerA++
 				: this.attacksMissedPlayerB++;
 			return false;
 		} else if (cell instanceof Ship) {
 			cell.hit(1);
+			console.log(cell.hits);
 			grid[y][x] = -1;
 			return true;
 		}
 	}
 	checkGameStatus(player) {
-		let grid;
-		if (player === "playerA") {
-			grid = this.playerA;
-		} else if (player === "playerB") {
-			grid = this.playerB;
-		}
+		console.log(player);
+		let grid = player === "user" ? this.playerA : this.playerB;
 		let hpCounter = 0;
+
 		for (let row of grid) {
 			for (let cell of row) {
-				if (cell instanceof Ship) {
+				if (cell instanceof Ship && !cell.sunk) {
 					hpCounter++;
 				}
 			}
 		}
-		if (hpCounter == 0 && player === "playerA") this.playerALost = true;
-		else if (hpCounter == 0 && player === "playerB") this.playerBLost = true;
+
+		console.log(hpCounter);
+
+		if (hpCounter === 0) {
+			if (player === "user") this.playerALost = true;
+			if (player === "computer") this.playerBLost = true;
+		}
 	}
 }
