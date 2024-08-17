@@ -1,9 +1,9 @@
 import Ship from "./ship";
 
-export default function createBoard(player, computer, game) {
+export default function createBoard(game) {
 	const root = document.querySelector(".root");
 	const createShips = () => {
-		return [
+		return [			
 			{ first: new Ship("carrier", 5) },
 			{
 				first: new Ship("battleship", 4),
@@ -16,7 +16,7 @@ export default function createBoard(player, computer, game) {
 			},
 			{
 				first: new Ship("submarine", 2),
-				second: new Ship("submarine", 2),
+				second: new Ship("submarine", 2),  
 				third: new Ship("submarine", 2),
 				fourth: new Ship("submarine", 2),
 			},
@@ -35,34 +35,37 @@ export default function createBoard(player, computer, game) {
 		});
 	};
 
-	const placeShips = (ships, player) => {
+	const placeShips = (ships, player) => {		
 		const getRandomCoords = (max) => Math.floor(Math.random() * max);
 		const getRandomDirection = () =>
 			["left", "up", "right", "down"][Math.floor(Math.random() * 4)];
-
+		
 		ships.forEach((shipModel) => {
 			Object.values(shipModel).forEach((ship) => {
+				
 				let unplaced = true;
 				while (unplaced) {
 					const y = getRandomCoords(10);
 					const x = getRandomCoords(10);
 					const dir = getRandomDirection();
+					console.log(`Placing ${ship.name} at [${y}, ${x}] facing ${dir}`);
 					const placementResult = game.place(ship, player, [y, x], dir);
 					if (placementResult !== "CANT PLACE THERE") unplaced = false;
 				}
 			});
-		});
+		})
+		
 	};
 
 	const createGameBoard = (board, container, player) => {
+		console.log(board,container)
 		container.innerHTML = "";
-		console.log(board);
 		board.forEach((row, rowIndex) => {
 			row.forEach((cellValue, colIndex) => {
 				const cell = document.createElement("div");
 				cell.dataset.row = rowIndex;
 				cell.dataset.col = colIndex;
-				if (player === "computer") {
+				if (player === "computer" || player === "user") {
 					cell.classList.add(
 						board[rowIndex][colIndex] instanceof Ship
 							? "shipCell"
@@ -75,17 +78,16 @@ export default function createBoard(player, computer, game) {
 				if (player === "user") {
 					cell.addEventListener("click", () => {
 						if (playerTurn) {
-							const hit = game.receiveAttack([rowIndex, colIndex], "computer");
+							console.log(`Turn: ${playerTurn ? 'Player' : 'Computer'} at ${new Date().toLocaleTimeString()}`);
+							const hit = game.receiveAttack([rowIndex, colIndex], "user");
 							playerTurn = false;
 							cell.classList.add(hit ? "clicked" : "sunk");
 							cell.style.pointerEvents = "none";
 							cell.textContent = hit ? "X" : "-1";
-
 							game.checkGameStatus(player);
 							if (game.playerBLost) alert("PERDIO ALGUIEN");
-
 							setTimeout(() => {
-								computerTurn(game.user);
+								computerTurn(game.computer);
 								game.checkGameStatus(game.playerA);
 								if (game.playerALost) alert("PERDIO ALGUIEN");
 							}, 500);
@@ -99,16 +101,16 @@ export default function createBoard(player, computer, game) {
 	};
 
 	const computerTurn = (opponent) => {
+		console.log(`Turn: ${playerTurn ? 'Player' : 'Computer'} at ${new Date().toLocaleTimeString()}`);
 		let y, x;
-		console.log(opponent);
 		const grid = opponent.gameboard;
-
+		console.log(grid)
 		do {
 			y = Math.floor(Math.random() * 10);
 			x = Math.floor(Math.random() * 10);
-		} while (grid[y][x] === -1 || typeof grid[y][x] === "object");
+		} while (grid[y][x] === -1 || typeof grid[y][x] === "undefined");
 
-		game.receiveAttack([y, x], "user");
+		game.receiveAttack([y, x], "computer");
 
 		const playerBoardCells =
 			computerGameBoard.querySelectorAll(".cell, .shipCell");
@@ -128,6 +130,7 @@ export default function createBoard(player, computer, game) {
 	placeShips(computerShips, "user");
 	const gameboardPlayer = game.playerA;
 	const gameboardComputer = game.playerB;
+	console.log(gameboardPlayer, gameboardComputer)
 	let playerTurn = true;
 	const playerGameBoard = document.createElement("div");
 	playerGameBoard.classList.add("gameboardContainer");

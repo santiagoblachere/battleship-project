@@ -14,8 +14,6 @@ export default class Gameboard {
 
 	place(ship, player, start, direction) {
 		let grid = player === "user" ? this.playerA : this.playerB;
-		console.log("Player A Board:", this.playerA);
-		console.log("Player B Board:", this.playerB);
 		let y = start[0];
 		let x = start[1];
 		for (let index = 0; index < ship.length; index++) {
@@ -51,7 +49,6 @@ export default class Gameboard {
 		let x = coords[1];
 		let grid = player === "user" ? this.playerA : this.playerB;
 		let cell = grid[y][x];
-
 		if (cell === 0) {
 			grid[y][x] = -1;
 			player === "user"
@@ -60,16 +57,14 @@ export default class Gameboard {
 			return false;
 		} else if (cell instanceof Ship) {
 			cell.hit(1);
-			console.log(cell.hits);
 			grid[y][x] = -1;
 			return true;
 		}
 	}
 	checkGameStatus(player) {
-		console.log(player);
 		let grid = player === "user" ? this.playerA : this.playerB;
 		let hpCounter = 0;
-
+		
 		for (let row of grid) {
 			for (let cell of row) {
 				if (cell instanceof Ship && !cell.sunk) {
@@ -77,9 +72,7 @@ export default class Gameboard {
 				}
 			}
 		}
-
-		console.log(hpCounter);
-
+		console.log(hpCounter)
 		if (hpCounter === 0) {
 			if (player === "user") this.playerALost = true;
 			if (player === "computer") this.playerBLost = true;

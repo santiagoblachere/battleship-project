@@ -14,7 +14,7 @@ function main() {
 	createPlayersButton.textContent = "CREATE PLAYERS";
 	createPlayersButton.addEventListener("click", () => {
 		const game = new Gameboard(player, computer);
-		createBoard(player, computer, game);
+		createBoard(game);
 		root.removeChild(createPlayersButton);
 	});
 
