@@ -58,14 +58,13 @@ export default function createBoard(game) {
 	};
 
 	const createGameBoard = (board, container, player) => {
-		console.log(board,container)
 		container.innerHTML = "";
 		board.forEach((row, rowIndex) => {
 			row.forEach((cellValue, colIndex) => {
 				const cell = document.createElement("div");
 				cell.dataset.row = rowIndex;
 				cell.dataset.col = colIndex;
-				if (player === "computer" || player === "user") {
+				if (player === "computer") {
 					cell.classList.add(
 						board[rowIndex][colIndex] instanceof Ship
 							? "shipCell"
@@ -85,11 +84,12 @@ export default function createBoard(game) {
 							cell.style.pointerEvents = "none";
 							cell.textContent = hit ? "X" : "-1";
 							game.checkGameStatus(player);
-							if (game.playerBLost) alert("PERDIO ALGUIEN");
+							console.log(game.playerBLost)
+							if(game.playerBLost === true) alert("YOU'VE LOST!") // should also reset gameboard!!!
 							setTimeout(() => {
 								computerTurn(game.computer);
 								game.checkGameStatus(game.playerA);
-								if (game.playerALost) alert("PERDIO ALGUIEN");
+								if(game.playerALost === true) alert("YOU'VE WON!") // should also reset gameboard!!!
 							}, 500);
 						}
 					});
@@ -104,20 +104,21 @@ export default function createBoard(game) {
 		console.log(`Turn: ${playerTurn ? 'Player' : 'Computer'} at ${new Date().toLocaleTimeString()}`);
 		let y, x;
 		const grid = opponent.gameboard;
-		console.log(grid)
 		do {
 			y = Math.floor(Math.random() * 10);
 			x = Math.floor(Math.random() * 10);
 		} while (grid[y][x] === -1 || typeof grid[y][x] === "undefined");
-
-		game.receiveAttack([y, x], "computer");
-
+		let hit = game.receiveAttack([y, x], "computer");	
 		const playerBoardCells =
-			computerGameBoard.querySelectorAll(".cell, .shipCell");
-		playerBoardCells.forEach((cell) => {
-			if (Number(cell.dataset.row) === y && Number(cell.dataset.col) === x) {
-				cell.textContent = "-1";
-				cell.classList.add("clicked");
+			computerGameBoard.querySelectorAll(".computerCell, .shipCell");
+		playerBoardCells.forEach((cell) => {	
+			if (cell.dataset.row == y && cell.dataset.col == x) {
+				if(hit) {
+					cell.textContent = "X"
+					cell.classList = "clicked"
+				} else {
+					cell.textContent = "-1"
+				}	
 			}
 		});
 
