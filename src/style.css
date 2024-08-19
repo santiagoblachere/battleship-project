@@ -3,8 +3,8 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #0b0c10;
-    color: #c5c6c7;
+    background-color: #1b3b6f;
+    color: #f0f8ff;
     font-family: 'Arial', sans-serif;
 }
 
@@ -12,9 +12,10 @@ body {
     display: flex;
     gap: 30px;
     padding: 20px;
-    background-color: #1f2833;
+    background-color: #224e79;
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    border: 3px solid #98c1d9;
 }
 
 .cell, .shipCell, .computerCell, .clicked {
@@ -29,14 +30,15 @@ body {
 }
 
 .cell {
-    background: linear-gradient(145deg, #1f2833, #0b0c10);
-    border: 2px solid #c5c6c7;
+    background: linear-gradient(145deg, #224e79, #1b3b6f);
+    border: 2px solid #98c1d9;
     transition: background 0.3s, transform 0.3s;
 }
 
 .cell:hover {
-    background-color: #45a29e;
+    background-color: #61a5c2;
     transform: scale(1.1);
+    cursor: pointer;
 }
 
 .gameboardContainer, .computerGameboardContainer {
@@ -47,19 +49,43 @@ body {
 }
 
 .computerCell {
-    background: linear-gradient(145deg, #4e4e50, #2c2d2f);
-    border: 2px solid #66fcf1;
+    background: linear-gradient(145deg, #3a5a93, #2a4c7a);
+    border: 2px solid #adcbe3;
 }
 
 .shipCell {
-    background: linear-gradient(145deg, #1f2833, #4e4e50);
-    border: 2px solid #66fcf1;
+    background: linear-gradient(145deg, #1c4966, #327ba8);
+    border: 2px solid #74a9cf;
+    box-shadow: 0 0 10px rgba(116, 169, 207, 0.7);
 }
 
 .clicked {
-    background: linear-gradient(145deg, #c5c6c7, #6b6e70);
-    border: 2px solid #66fcf1;
-    color: #0b0c10;
+    background: linear-gradient(145deg, #f0f8ff, #6b8ea3);
+    border: 2px solid #adcbe3;
+    color: #1b3b6f;
     transform: scale(1.05);
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+button {
+    background-color: #327ba8;
+    color: #f0f8ff;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: 2px solid #adcbe3;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+button:hover {
+    background-color: #61a5c2;
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+    background-color: #1c4966;
+    transform: scale(0.95);
+    box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.5);
 }

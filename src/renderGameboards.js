@@ -48,7 +48,6 @@ export default function createBoard(game) {
 					const y = getRandomCoords(10);
 					const x = getRandomCoords(10);
 					const dir = getRandomDirection();
-					console.log(`Placing ${ship.name} at [${y}, ${x}] facing ${dir}`);
 					const placementResult = game.place(ship, player, [y, x], dir);
 					if (placementResult !== "CANT PLACE THERE") unplaced = false;
 				}
@@ -77,14 +76,34 @@ export default function createBoard(game) {
 				if (player === "user") {
 					cell.addEventListener("click", () => {
 						if (playerTurn) {
-							console.log(`Turn: ${playerTurn ? 'Player' : 'Computer'} at ${new Date().toLocaleTimeString()}`);
+							const root = document.querySelector(".root");
+							const button = document.querySelector(".randomizeButton")
+							if (button) {
+								root.removeChild(button) 
+								const resetBoard = document.createElement('button');
+								resetBoard.textContent = "RESET GAME"
+								resetBoard.addEventListener("click", () => {
+								resetGameboard(gameboardPlayer);
+								resetGameboard(gameboardComputer);
+								const playerShips = createShips();
+								const computerShips = createShips();
+								placeShips(playerShips, "computer");
+								placeShips(computerShips, "user");
+								createGameBoard(gameboardPlayer, playerGameBoard, "user");
+								createGameBoard(gameboardComputer, computerGameBoard, "computer");
+								
+								})
+							root.appendChild(resetBoard)
+							}
+							
+							
+							
 							const hit = game.receiveAttack([rowIndex, colIndex], "user");
 							playerTurn = false;
 							cell.classList.add(hit ? "clicked" : "sunk");
 							cell.style.pointerEvents = "none";
 							cell.textContent = hit ? "X" : "-1";
 							game.checkGameStatus(player);
-							console.log(game.playerBLost)
 							if(game.playerBLost === true) alert("YOU'VE LOST!") // should also reset gameboard!!!
 							setTimeout(() => {
 								computerTurn(game.computer);
@@ -131,7 +150,6 @@ export default function createBoard(game) {
 	placeShips(computerShips, "user");
 	const gameboardPlayer = game.playerA;
 	const gameboardComputer = game.playerB;
-	console.log(gameboardPlayer, gameboardComputer)
 	let playerTurn = true;
 	const playerGameBoard = document.createElement("div");
 	playerGameBoard.classList.add("gameboardContainer");
@@ -154,7 +172,6 @@ export default function createBoard(game) {
 		randomizeBoardButton.classList.add("randomizeButton");
 		randomizeBoardButton.textContent = "RANDOMIZE SHIP PLACEMENT";
 		randomizeBoardButton.addEventListener("click", () => {
-			// Reset the gameboard before placing new ships
 			resetGameboard(gameboardComputer);
 			placeShips(playerShips, "computer");
 			createGameBoard(gameboardComputer, computerGameBoard, "computer");
