@@ -91,7 +91,8 @@ export default function createBoard(game) {
 								placeShips(computerShips, "user");
 								createGameBoard(gameboardPlayer, playerGameBoard, "user");
 								createGameBoard(gameboardComputer, computerGameBoard, "computer");
-								
+								root.removeChild(resetBoard);
+								createButton()
 								})
 							root.appendChild(resetBoard)
 							}
@@ -165,9 +166,9 @@ export default function createBoard(game) {
 	boards.appendChild(playerGameBoard);
 
 	root.appendChild(boards);
-
-	const previousButton = document.querySelector(".randomizeButton");
-	if (!previousButton) {
+	function createButton() {
+		const previousButton = document.querySelector(".randomizeButton");
+		if (!previousButton) {
 		const randomizeBoardButton = document.createElement("button");
 		randomizeBoardButton.classList.add("randomizeButton");
 		randomizeBoardButton.textContent = "RANDOMIZE SHIP PLACEMENT";
@@ -178,4 +179,7 @@ export default function createBoard(game) {
 		});
 		root.appendChild(randomizeBoardButton);
 	}
+	}
+	createButton()
+	
 }
